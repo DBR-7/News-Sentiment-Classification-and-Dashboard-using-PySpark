@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-"""News_Streaming.ipynb - UPDATED WITH TRAIN/TEST SPLIT"""
-
 import streamlit as st
 import pandas as pd
 import requests
