@@ -42,7 +42,7 @@ except KeyError:
     st.error("NEWS_API_KEY not found in secrets. Please set it in your Streamlit Cloud app settings.")
     st.stop()
 
-def fetch_news(topic, page_size=20):  # Increased default for split
+def fetch_news(topic, page_size=20): 
     """Fetches news articles and returns a Pandas DataFrame."""
     url = f"https://newsapi.org/v2/everything?q={topic}&pageSize={page_size}&sortBy=publishedAt&apiKey={NEWS_API_KEY}"
     try:
@@ -100,7 +100,7 @@ if run_button:
                 df_pd_labeled = label_sentiment_vader(df_pd)
                 df_spark = spark.createDataFrame(df_pd_labeled)
                 
-                # **FIX 1: Train/Test Split**
+                # Train/Test Split
                 train_df, test_df = df_spark.randomSplit([train_ratio, 1-train_ratio], seed=42)
                 
                 # Pipeline
@@ -110,10 +110,10 @@ if run_button:
                 lr = LogisticRegression(featuresCol="features", labelCol="label", maxIter=10, regParam=0.001)
                 pipeline = Pipeline(stages=[tokenizer, hashingTF, idf, lr])
                 
-                # **FIX 2: Train on train_df only**
+                # Train on train_df only
                 model = pipeline.fit(train_df)
                 
-                # **FIX 3: Test on test_df only**
+                # Test on test_df only
                 train_predictions = model.transform(train_df)
                 test_predictions = model.transform(test_df)
                 
